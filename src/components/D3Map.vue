@@ -7,7 +7,8 @@
 <script>
 import topojson from 'topojson/build/topojson.js'
 import towntopojson from '../assets/json/towns-topojson.json'
-import Allpeople from '../assets/json/allpeople.json'
+// import Allpeople from '../assets/json/allpeople_disabilities.json'
+import Allpeople from '../assets/json/allpeople_prevalence.json'
 import d3 from 'd3/d3.js'
 import 'd3-svg-legend'
 import jquery from 'jquery/src/jquery.js'
@@ -113,7 +114,7 @@ var redraw = function (peopleData) {
   var linearLegend = d3.legend.color()
       .cells(10)
       .scale(linear)
-      .title('身心障礙人口數')
+      .title('身心障礙人口盛行率')
   legend.call(linearLegend)
 
   // Update
@@ -146,13 +147,21 @@ var redraw = function (peopleData) {
 }
 
 var tooltipHtml = function (town, people) {
-  var code = '<p id="tooltip-town-name">' + town + '</p><hr>' + '<p id="tooltip-tax"><span id="tooltip-legend-icon" style="color: ' + (people === undefined ? '#ECECEC' : linear(people)) + '; ">●</span><span id="tooltip-value"> ' + (people === undefined ? '無資料' : people) + '</span></p>'
+  var code = '<p id="tooltip-town-name">' + town + '</p><hr>' + '<p id="tooltip-tax"><span id="tooltip-legend-icon" style="color: ' + (people === undefined ? '#ECECEC' : linear(people)) + '; ">●</span><span id="tooltip-value"> ' + (people === undefined ? '無資料' : people + ' ‰') + '</span></p>'
   return code
 }
 
+/* eslint-disable no-unused-vars */
 var roundLegendLabel = function (labels) {
   for (let i in [...Array(10).keys(labels.length)]) {
     labels[i].textContent = String(Math.round(labels[i].textContent))
+  }
+}
+/* eslint-enable no-unused-vars */
+
+var perMilleLegendLabel = function (labels) {
+  for (let i in [...Array(10).keys(labels.length)]) {
+    labels[i].textContent = String(labels[i].textContent) + ' ‰'
   }
 }
 
@@ -160,12 +169,12 @@ export default {
   ready () {
     binddom()
     redraw(Allpeople)
-    roundLegendLabel($('g.legendCells text.label'))
+    perMilleLegendLabel($('g.legendCells text.label'))
   },
   events: {
     'draw-new-map': function (value) {
       redraw(value)
-      roundLegendLabel($('g.legendCells text.label'))
+      perMilleLegendLabel($('g.legendCells text.label'))
     }
   }
 }
