@@ -1,4 +1,4 @@
 {
-  "serverRoot" : "http://localhost:5000",
+  "serverRoot" : "http://vivirand.asuscomm.com:5555",
   "apiEndpoint" : "/api"
 }
