@@ -28,7 +28,7 @@ var projection = d3.geo.mercator()
 
 // 顏色尺度 for Horizontal d3-legend
 var linear = d3.scale.linear()
-  .range(['#FFE4B5', '#F64403'])
+  .range(['hsl(88, 50%, 53%)', 'hsl(54, 100%, 62%)', 'hsl(4, 90%, 58%)'])
 
 var path = d3.geo.path()
   .projection(projection)
@@ -50,7 +50,7 @@ var binddom = function () {
   // Vertical Legend
   svg.append('g')
     .attr('class', 'verticalLegend')
-    .attr('transform', 'translate(50,250)')
+    .attr('transform', 'translate(50,350)')
 
   tooltip = d3.select('div#chart')
     .append('div')
@@ -68,7 +68,7 @@ var redraw = function (peopleData) {
 
   // 幫 d3-legend linear 尺度指定資料範圍
   // 在這邊，sortedData[0]["properties"][selectedType]] 剛好會是最大值
-  linear.domain([0, peopleData[sortedData[0]['id']]])
+  linear.domain([0, (0 + peopleData[sortedData[0]['id']]) / 2, peopleData[sortedData[0]['id']]])
   // Data Join
   var town = svg.selectAll('.town')
     .data(data, function (d) {
@@ -112,7 +112,7 @@ var redraw = function (peopleData) {
   // Vertical Legend
   var legend = d3.select('.verticalLegend')
   var linearLegend = d3.legend.color()
-      .cells(10)
+      .cells(5)
       .scale(linear)
       .title('身心障礙人口盛行率')
   legend.call(linearLegend)
